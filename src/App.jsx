@@ -3,7 +3,8 @@ import Navbar from "./sections/navbar";
 import Hero from "./sections/hero";
 import About from "./sections/about";
 import Projects from "./sections/projects";
-
+import Client from "./sections/client";
+import Contact from "./sections/contact";
 
 const App = () => {
     return (
@@ -12,6 +13,8 @@ const App = () => {
             <Hero />
             <About />
             <Projects />
+            <Client />
+            <Contact />
         </main>
     )
 };
