@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
 
@@ -12,18 +13,60 @@ const Contact = () => {
         message: ''
     })
 
-    const handleChange = () => { }
-    const handleSubmit = () => { }
+    const handleChange = ({ target: { name, value } }) => {
+        setForm({ ...form, [name]: value })
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        setLoading(true);
+
+        try {
+
+            await emailjs.send(
+                'service_nmznml4',
+                'template_oia5bfv',
+                {
+                    from_name: form.name,
+                    to_name: 'Thisal Senevirathne',
+                    form_email: form.email,
+                    to_email: 'salpurathisal@gmail.com',
+                    message: form.message
+                },
+                'UxuWdA-5iDKIqtG3T'
+            )
+
+            setLoading(false);
+
+            alert('Your message has been sent!');
+
+            setForm({
+                name: '',
+                email: '',
+                message: ''
+            })
+
+        } catch (error) {
+
+            setLoading(false);
+
+            console.log(error);
+
+            alert('Something went wrong');
+
+        }
+    }
 
     return (
         <section className="c-space my-20">
-            <div className="relative flex items-center justify-center flex-col">
+            <div className="relative flex items-center justify-center flex-col bg-black-200 md:bg-transparent rounded-lg">
                 <img
                     src="/assets/terminal.png"
                     alt="terminal background"
-                    className="absolute inset-0 h-full w-full"
+                    className="absolute inset-0 h-full w-full hidden md:block"
                 />
-                <div className="contact-container relative z-10 p-12">
+                <div className="contact-container relative z-10 p-16">
                     <h3 className="head-text text-white">Let's Talk</h3>
                     <p className="text-lg text-gray-300 mt-3">
                         Whether you're looking to build a new website, improve your existing
