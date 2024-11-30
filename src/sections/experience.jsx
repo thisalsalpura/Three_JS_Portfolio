@@ -1,8 +1,7 @@
 import { Canvas } from "@react-three/fiber";
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { workExperiences } from "../constants";
 import { OrbitControls } from "@react-three/drei";
-import { Suspense } from "react";
 import CanvasLoader from "../components/CanvasLoader";
 import Developer from "../components/Developer";
 
@@ -28,7 +27,7 @@ const Experience = () => {
                         </Canvas>
                     </div>
 
-                    <dir className="work-content">
+                    <div className="work-content">
                         <div className="sm:py-10 py-5 sm:px-5 px-2.5">
                             {workExperiences.map(({ id, name, pos, icon, duration, title, animation }) => (
                                 <div key={id} className="work-content_container group"
@@ -50,7 +49,7 @@ const Experience = () => {
                                 </div>
                             ))}
                         </div>
-                    </dir>
+                    </div>
                 </div>
             </div>
         </section>

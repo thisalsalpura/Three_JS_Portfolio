@@ -1,33 +1,68 @@
-import React, { useEffect, useRef } from 'react'
-import { useAnimations, useFBX, useGLTF } from '@react-three/drei'
+import React, { useEffect, useRef } from 'react';
+import { useGraph } from '@react-three/fiber';
+import { useAnimations, useFBX, useGLTF } from '@react-three/drei';
+import { SkeletonUtils } from 'three-stdlib';
 
 const Developer = ({ animationName = 'idle', ...props }) => {
-
     const group = useRef();
 
-    const { nodes, materials } = useGLTF('/models/human/player.glb')
+    const { scene } = useGLTF('/models/human/developer.glb');
+    const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene]);
+    const { nodes, materials } = useGraph(clone);
 
-    const { animations: idleAnimation } = useFBX('/models/animations/idle.fbx')
-    const { animations: dance1Animation } = useFBX('/models/animations/dance1.fbx')
-    const { animations: dance2Animation } = useFBX('/models/animations/dance2.fbx')
-    const { animations: dance3Animation } = useFBX('/models/animations/dance3.fbx')
+    const { animations: idleAnimation } = useFBX('/models/human/idle.fbx');
+    const { animations: saluteAnimation } = useFBX('/models/human/salute.fbx');
+    const { animations: clappingAnimation } = useFBX('/models/human/clapping.fbx');
+    const { animations: victoryAnimation } = useFBX('/models/human/victory.fbx');
 
     idleAnimation[0].name = 'idle';
-    dance1Animation[0].name = 'dance1';
-    dance2Animation[0].name = 'dance2';
-    dance3Animation[0].name = 'dance3';
+    saluteAnimation[0].name = 'salute';
+    clappingAnimation[0].name = 'clapping';
+    victoryAnimation[0].name = 'victory';
 
-    const { actions } = useAnimations([idleAnimation[0], dance1Animation[0], dance2Animation[0], dance3Animation[0]], group);
+    const { actions } = useAnimations(
+        [idleAnimation[0], saluteAnimation[0], clappingAnimation[0], victoryAnimation[0]],
+        group,
+    );
 
     useEffect(() => {
         actions[animationName].reset().fadeIn(0.5).play();
-
         return () => actions[animationName].fadeOut(0.5);
-    }, [animationName])
+    }, [animationName]);
 
     return (
-        <group {...props} dispose={null} ref={group}>
+        <group ref={group} {...props} dispose={null}>
             <primitive object={nodes.Hips} />
+            <skinnedMesh
+                geometry={nodes.Wolf3D_Hair.geometry}
+                material={materials.Wolf3D_Hair}
+                skeleton={nodes.Wolf3D_Hair.skeleton}
+            />
+            <skinnedMesh
+                geometry={nodes.Wolf3D_Glasses.geometry}
+                material={materials.Wolf3D_Glasses}
+                skeleton={nodes.Wolf3D_Glasses.skeleton}
+            />
+            <skinnedMesh
+                geometry={nodes.Wolf3D_Body.geometry}
+                material={materials.Wolf3D_Body}
+                skeleton={nodes.Wolf3D_Body.skeleton}
+            />
+            <skinnedMesh
+                geometry={nodes.Wolf3D_Outfit_Bottom.geometry}
+                material={materials.Wolf3D_Outfit_Bottom}
+                skeleton={nodes.Wolf3D_Outfit_Bottom.skeleton}
+            />
+            <skinnedMesh
+                geometry={nodes.Wolf3D_Outfit_Footwear.geometry}
+                material={materials.Wolf3D_Outfit_Footwear}
+                skeleton={nodes.Wolf3D_Outfit_Footwear.skeleton}
+            />
+            <skinnedMesh
+                geometry={nodes.Wolf3D_Outfit_Top.geometry}
+                material={materials.Wolf3D_Outfit_Top}
+                skeleton={nodes.Wolf3D_Outfit_Top.skeleton}
+            />
             <skinnedMesh
                 name="EyeLeft"
                 geometry={nodes.EyeLeft.geometry}
@@ -60,35 +95,10 @@ const Developer = ({ animationName = 'idle', ...props }) => {
                 morphTargetDictionary={nodes.Wolf3D_Teeth.morphTargetDictionary}
                 morphTargetInfluences={nodes.Wolf3D_Teeth.morphTargetInfluences}
             />
-            <skinnedMesh
-                geometry={nodes.Wolf3D_Hair.geometry}
-                material={materials.Wolf3D_Hair}
-                skeleton={nodes.Wolf3D_Hair.skeleton}
-            />
-            <skinnedMesh
-                geometry={nodes.Wolf3D_Outfit_Top.geometry}
-                material={materials.Wolf3D_Outfit_Top}
-                skeleton={nodes.Wolf3D_Outfit_Top.skeleton}
-            />
-            <skinnedMesh
-                geometry={nodes.Wolf3D_Outfit_Bottom.geometry}
-                material={materials.Wolf3D_Outfit_Bottom}
-                skeleton={nodes.Wolf3D_Outfit_Bottom.skeleton}
-            />
-            <skinnedMesh
-                geometry={nodes.Wolf3D_Outfit_Footwear.geometry}
-                material={materials.Wolf3D_Outfit_Footwear}
-                skeleton={nodes.Wolf3D_Outfit_Footwear.skeleton}
-            />
-            <skinnedMesh
-                geometry={nodes.Wolf3D_Body.geometry}
-                material={materials.Wolf3D_Body}
-                skeleton={nodes.Wolf3D_Body.skeleton}
-            />
         </group>
-    )
-}
+    );
+};
 
-useGLTF.preload('/models/human/player.glb')
+useGLTF.preload('/models/human/developer.glb');
 
 export default Developer;
