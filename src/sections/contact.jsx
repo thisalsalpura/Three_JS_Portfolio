@@ -25,8 +25,8 @@ const Contact = () => {
         try {
 
             await emailjs.send(
-                'service_nmznml4',
-                'template_oia5bfv',
+                '--',
+                '--',
                 {
                     from_name: form.name,
                     to_name: 'Thisal Senevirathne',
@@ -34,7 +34,7 @@ const Contact = () => {
                     to_email: 'salpurathisal@gmail.com',
                     message: form.message
                 },
-                'UxuWdA-5iDKIqtG3T'
+                '--'
             )
 
             setLoading(false);
